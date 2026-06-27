@@ -28,6 +28,14 @@ interface Tea {
 
 const WHATSAPP_NUMBER = "2348095660030";
 
+const formatPrice = (priceStr: string) => {
+  const num = parseFloat(priceStr.replace(/[^0-9.]/g, ""));
+  if (isNaN(num)) return priceStr;
+  const rate = 1500; // 1 USD = 1500 NGN
+  const nairaVal = Math.round((num * rate) / 100) * 100;
+  return `₦${nairaVal.toLocaleString()}`;
+};
+
 export default function ShopTab() {
   const [teas, setTeas] = useState<Tea[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +75,8 @@ export default function ShopTab() {
   };
 
   const openWhatsApp = (tea: Tea) => {
-    const price = orderQty === "single" ? tea.singlePrice : tea.bulkPrice;
+    const rawPrice = orderQty === "single" ? tea.singlePrice : tea.bulkPrice;
+    const price = formatPrice(rawPrice);
     const qty =
       orderQty === "single" ? "1 unit" : `${tea.bulkMinQty}+ units (bulk)`;
     const message = encodeURIComponent(
@@ -148,8 +157,8 @@ export default function ShopTab() {
               <div className="text-center">
                 <p className="text-2xl font-bold text-slate-800">
                   {orderQty === "single"
-                    ? selectedTea.singlePrice
-                    : selectedTea.bulkPrice}
+                    ? formatPrice(selectedTea.singlePrice)
+                    : formatPrice(selectedTea.bulkPrice)}
                 </p>
                 <p className="text-xs text-slate-500 mt-0.5">
                   {orderQty === "single"
@@ -256,7 +265,7 @@ export default function ShopTab() {
             wellness routines during menstrual cycles.
           </p>
           <div className="mt-3 flex items-end gap-2">
-            <span className="text-2xl font-bold">$8.99</span>
+            <span className="text-2xl font-bold">{formatPrice("$8.99")}</span>
             <span className="text-xs text-amber-200 mb-1">per unit</span>
           </div>
         </div>
@@ -307,11 +316,11 @@ export default function ShopTab() {
                   </p>
                   <div className="flex items-center justify-between mt-2">
                     <p className="font-bold text-sm text-rose-600">
-                      {tea.singlePrice}
+                      {formatPrice(tea.singlePrice)}
                     </p>
                     <div className="flex items-center gap-1 text-[10px] text-emerald-600">
                       <Package size={10} />
-                      <span>Bulk: {tea.bulkPrice}</span>
+                      <span>Bulk: {formatPrice(tea.bulkPrice)}</span>
                     </div>
                   </div>
                 </div>

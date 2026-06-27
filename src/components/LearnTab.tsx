@@ -24,7 +24,7 @@ interface Article {
   imageUrl: string | null;
 }
 
-const LANGUAGES = ["All", "English", "French", "Spanish"];
+const LANGUAGES = ["All", "English", "Hausa", "Yoruba", "Igbo"];
 const CATEGORIES = [
   "All",
   "Menstrual Health",

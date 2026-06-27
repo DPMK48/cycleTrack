@@ -18,9 +18,6 @@ import {
   Moon,
   Sunrise,
   Flower,
-  BarChart2,
-  BookOpen,
-  Leaf,
 } from "lucide-react";
 
 interface HomeTabProps {
@@ -98,31 +95,26 @@ export default function HomeTab({
         <div className="grid grid-cols-2 gap-3">
           {[
             {
-              icon: <BarChart2 size={24} className="text-rose-500" />,
               title: "Track Cycles",
               desc: "Log & predict periods",
             },
             {
-              icon: null,
               title: "Wellness Teas",
               desc: "Natural herbal support",
             },
             {
-              icon: <BookOpen size={24} className="text-pink-500" />,
               title: "Learn & Grow",
               desc: "Education resources",
             },
             {
-              icon: <Leaf size={24} className="text-emerald-500" />,
               title: "Daily Tips",
               desc: "Phase-based guidance",
             },
           ].map((f) => (
             <div
               key={f.title}
-              className="bg-white rounded-2xl p-4 border border-rose-50 shadow-sm"
+              className="bg-white rounded-2xl p-4 border border-rose-50 shadow-sm text-center flex flex-col justify-center min-h-[90px]"
             >
-              {f.icon && <div className="mb-2">{f.icon}</div>}
               <h3 className="font-semibold text-sm text-slate-800">
                 {f.title}
               </h3>

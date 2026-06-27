@@ -1,7 +1,5 @@
 "use client";
 
-import { Flower2 } from "lucide-react";
-
 import { useState, useEffect } from "react";
 import BottomNav from "@/components/BottomNav";
 import HomeTab from "@/components/HomeTab";
@@ -59,9 +57,6 @@ export default function App() {
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-rose-50 to-pink-50">
-        <div className="mb-4 animate-pulse-soft">
-          <Flower2 size={48} className="text-rose-400" strokeWidth={1.5} />
-        </div>
         <h1 className="text-xl font-bold bg-gradient-to-r from-rose-600 to-pink-500 bg-clip-text text-transparent">
           CycleTrack
         </h1>
