@@ -10,6 +10,8 @@ import {
   ChevronLeft,
   Check,
   Package,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 interface Tea {
@@ -22,6 +24,7 @@ interface Tea {
   bulkPrice: string;
   bulkMinQty: number | null;
   imageUrl: string | null;
+  videoUrl: string | null;
   isPrimary: boolean | null;
   category: string | null;
 }
@@ -29,11 +32,17 @@ interface Tea {
 const WHATSAPP_NUMBER = "2348095660030";
 
 const formatPrice = (priceStr: string) => {
+  if (priceStr.startsWith("₦")) return priceStr;
   const num = parseFloat(priceStr.replace(/[^0-9.]/g, ""));
   if (isNaN(num)) return priceStr;
-  const rate = 1500; // 1 USD = 1500 NGN
-  const nairaVal = Math.round((num * rate) / 100) * 100;
-  return `₦${nairaVal.toLocaleString()}`;
+  
+  if (priceStr.includes("$")) {
+    const rate = 1500; // 1 USD = 1500 NGN
+    const nairaVal = Math.round((num * rate) / 100) * 100;
+    return `₦${nairaVal.toLocaleString()}`;
+  }
+  
+  return `₦${num.toLocaleString()}`;
 };
 
 export default function ShopTab() {
@@ -43,10 +52,20 @@ export default function ShopTab() {
   const [orderQty, setOrderQty] = useState<"single" | "bulk">("single");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  
+  const [mediaMode, setMediaMode] = useState<"image" | "video">("image");
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
 
   useEffect(() => {
     fetchTeas(1);
   }, []);
+
+  useEffect(() => {
+    if (selectedTea) {
+      setMediaMode(selectedTea.videoUrl ? "video" : "image");
+      setIsVideoMuted(true);
+    }
+  }, [selectedTea]);
 
   const fetchTeas = async (pageNum = 1) => {
     try {
@@ -92,25 +111,78 @@ export default function ShopTab() {
     return (
       <div className="pb-28">
         {/* Hero Image */}
-        {selectedTea.imageUrl && (
-          <div className="relative w-full h-64">
-            <img
-              src={selectedTea.imageUrl}
-              alt={selectedTea.name}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        {(selectedTea.imageUrl || selectedTea.videoUrl) && (
+          <div className="relative w-full h-72 bg-slate-900 overflow-hidden">
+            {selectedTea.videoUrl && mediaMode === "video" ? (
+              <video
+                src={selectedTea.videoUrl}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted={isVideoMuted}
+                playsInline
+              />
+            ) : (
+              selectedTea.imageUrl && (
+                <img
+                  src={selectedTea.imageUrl}
+                  alt={selectedTea.name}
+                  className="w-full h-full object-cover"
+                />
+              )
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/30 pointer-events-none" />
+            
+            {/* Back button */}
             <button
               onClick={() => setSelectedTea(null)}
-              className="absolute top-12 left-4 w-9 h-9 rounded-full glass flex items-center justify-center"
+              className="absolute top-12 left-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-lg active:scale-95 transition-transform"
             >
-              <ChevronLeft size={20} className="text-slate-700" />
+              <ChevronLeft size={20} className="text-white" />
             </button>
+
+            {/* Flagship Badge */}
             {selectedTea.isPrimary && (
-              <div className="absolute top-12 right-4 bg-amber-400 text-amber-900 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                <Star size={10} />
+              <div className="absolute top-12 right-4 bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg border border-amber-300/30">
+                <Star size={10} fill="currentColor" />
                 FLAGSHIP
               </div>
+            )}
+
+            {/* Media toggle tabs (Photo / Video) */}
+            {selectedTea.videoUrl && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-0.5 flex gap-1 shadow-lg z-10">
+                <button
+                  onClick={() => setMediaMode("image")}
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all flex items-center gap-1 ${
+                    mediaMode === "image"
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Photo
+                </button>
+                <button
+                  onClick={() => setMediaMode("video")}
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all flex items-center gap-1 ${
+                    mediaMode === "video"
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Video
+                </button>
+              </div>
+            )}
+
+            {/* Mute button overlay for video */}
+            {selectedTea.videoUrl && mediaMode === "video" && (
+              <button
+                onClick={() => setIsVideoMuted(!isVideoMuted)}
+                className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-black/60 transition-colors z-10"
+              >
+                {isVideoMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+              </button>
             )}
           </div>
         )}
@@ -244,34 +316,42 @@ export default function ShopTab() {
       </p>
 
       {/* Featured Banner */}
-      <div
-        className="rounded-2xl p-5 mb-5 text-white shadow-lg relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #92400e 0%, #b45309 50%, #d97706 100%)",
-        }}
-      >
-        <div className="relative z-10">
-          <div className="flex items-center gap-1.5 mb-1">
-            <Star size={14} className="text-amber-300" />
-            <span className="text-[10px] font-bold text-amber-200 uppercase tracking-wider">
-              Flagship Product
-            </span>
+      {(() => {
+        const flagshipTea = teas.find((t) => t.isPrimary || t.name.includes("Cassia-Turmeric"));
+        return (
+          <div
+            onClick={() => flagshipTea && setSelectedTea(flagshipTea)}
+            className="rounded-2xl p-5 mb-5 text-white shadow-lg relative overflow-hidden cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all"
+            style={{
+              background: "linear-gradient(135deg, #92400e 0%, #b45309 50%, #d97706 100%)",
+            }}
+          >
+            <div className="relative z-10">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Star size={14} className="text-amber-300" fill="currentColor" />
+                <span className="text-[10px] font-bold text-amber-200 uppercase tracking-wider">
+                  Flagship Product
+                </span>
+              </div>
+              <h2 className="font-bold text-lg mb-1">
+                {flagshipTea ? flagshipTea.name : "Cassia-Turmeric Infusion"}
+              </h2>
+              <p className="text-xs text-amber-100 leading-relaxed max-w-[250px] opacity-90 line-clamp-2">
+                {flagshipTea ? flagshipTea.description : "A carefully designed herbal wellness drink supporting comfort-based wellness routines."}
+              </p>
+              <div className="mt-3 flex items-end gap-2">
+                <span className="text-2xl font-bold">
+                  {flagshipTea ? formatPrice(flagshipTea.singlePrice) : formatPrice("₦2,000")}
+                </span>
+                <span className="text-xs text-amber-200 mb-1">per unit</span>
+              </div>
+            </div>
+            <div className="absolute -right-4 -bottom-4 text-8xl opacity-20 pointer-events-none">
+              <Star size={140} className="text-amber-100/10" fill="currentColor" />
+            </div>
           </div>
-          <h2 className="font-bold text-lg mb-1">
-            Cassia-Turmeric Infusion
-          </h2>
-          <p className="text-xs text-amber-100 leading-relaxed max-w-[250px]">
-            A carefully designed herbal wellness drink supporting comfort-based
-            wellness routines during menstrual cycles.
-          </p>
-          <div className="mt-3 flex items-end gap-2">
-            <span className="text-2xl font-bold">{formatPrice("$8.99")}</span>
-            <span className="text-xs text-amber-200 mb-1">per unit</span>
-          </div>
-        </div>
-        <div className="absolute -right-4 -bottom-4 text-8xl opacity-20">
-        </div>
-      </div>
+        );
+      })()}
 
       {/* Tea List */}
       {loading ? (

@@ -106,14 +106,15 @@ export default function WellnessTab({
 
   const phaseDietData: Record<
     string,
-    { foods: string[]; avoid: string[]; exercise: string[] }
+    { foods: string[]; avoid: string[]; exercise: string[]; herbalSupport: string }
   > = {
     Menstruation: {
       foods: [
         "Iron-rich leafy greens (spinach, kale)",
         "Dark chocolate (70%+ cacao)",
         "Warm soups & bone broths",
-        "Ginger & turmeric teas",
+        "Cassia-Turmeric Infusion (flagship blend)",
+        "Hamy Black Tea (The Spark)",
         "Vitamin C fruits (oranges, strawberries)",
         "Fatty fish (salmon, mackerel)",
         "Lentils and beans",
@@ -131,11 +132,13 @@ export default function WellnessTab({
         "Meditation & breathwork",
         "Gentle swimming",
       ],
+      herbalSupport: "During menstruation, your body benefits greatly from Cassia-Turmeric Infusion (our flagship Golden Detoxifier) and Hamy Black Tea. Cassia-Turmeric utilizes piperine from black pepper to boost curcumin absorption by 2,000%, relieving uterine cramping and cellular inflammation. Hamy Black Tea provides a warming 'Thermogenic Kick' of ginger, cinnamon, and cayenne pepper to keep your metabolism and body heat supported.",
     },
     "Follicular Phase": {
       foods: [
         "Fresh salads & raw veggies",
         "Eggs and lean proteins",
+        "Hamy Green Tea (Metabolic & Digestive)",
         "Fermented foods (yogurt, kimchi)",
         "Sprouted grains & quinoa",
         "Citrus fruits",
@@ -153,16 +156,17 @@ export default function WellnessTab({
         "Hiking & outdoor activities",
         "Strength training",
       ],
+      herbalSupport: "As your energy rises in the follicular phase, Hamy Green Tea provides robust metabolic support. Its active EGCG catechins work in synergy with black pepper to support natural calorie-burning and fat oxidation, while mint and fennel seeds keep your digestion crisp, light, and bloating-free.",
     },
     Ovulation: {
       foods: [
         "Anti-inflammatory vegetables",
         "Antioxidant-rich berries",
+        "Hami Hibiscus Spiced Delight",
         "Omega-3 fatty fish",
         "Nuts (almonds, walnuts)",
         "Whole grains",
         "Raw fruits & vegetables",
-        "Ginger & turmeric",
       ],
       avoid: [
         "Processed foods",
@@ -175,6 +179,7 @@ export default function WellnessTab({
         "Running & sprinting",
         "Rock climbing",
       ],
+      herbalSupport: "Support your peak energy levels and cardiovascular health during ovulation with Hami Hibiscus Spiced Delight. This vibrant, naturally caffeine-free tea contains potent heart-healthy hibiscus combined with a stimulating cayenne pepper kick and refreshing lemongrass.",
     },
     "Luteal Phase": {
       foods: [
@@ -182,7 +187,7 @@ export default function WellnessTab({
         "Magnesium foods (dark chocolate, nuts)",
         "B-vitamin foods (eggs, whole grains)",
         "Potassium-rich foods (bananas)",
-        "Warm herbal teas",
+        "Hamy Black Tea & Hamy Green Tea",
         "Leafy greens",
         "Seeds (sunflower, sesame)",
       ],
@@ -198,6 +203,7 @@ export default function WellnessTab({
         "Restorative yoga",
         "Swimming",
       ],
+      herbalSupport: "To manage PMS symptoms, bloating, and sweet cravings during the luteal phase, sip on Hamy Black Tea—its cinnamon content stabilizes blood sugar to naturally curb cravings while mint and lemongrass ease bloating. For joint stiffness or water retention, Cassia-Turmeric Infusion provides deep cellular cleansing.",
     },
   };
 
@@ -339,10 +345,7 @@ export default function WellnessTab({
                       </h4>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Our Cassia-Turmeric Wellness Infusion is especially
-                      beneficial during this phase. The anti-inflammatory
-                      properties of turmeric combined with warming cassia help
-                      support your body naturally.
+                      {data.herbalSupport}
                     </p>
                   </div>
                 </div>

@@ -230,27 +230,27 @@ export function getSymptomRecommendations(symptoms: string[]): {
   const tips: string[] = [];
 
   if (symptoms.includes("cramps")) {
-    teas.push("Cassia-Turmeric Wellness Infusion", "Ginger-Lemon Comfort Tea");
+    teas.push("Cassia-Turmeric Infusion", "Hamy Black Tea");
     tips.push("Apply a warm compress to your lower abdomen", "Try gentle hip-opening stretches");
   }
   if (symptoms.includes("bloating")) {
-    teas.push("Peppermint-Fennel Digestive Ease");
+    teas.push("Hamy Green Tea", "Hamy Black Tea");
     tips.push("Reduce salt intake", "Drink plenty of water", "Try gentle walking");
   }
   if (symptoms.includes("headache")) {
-    teas.push("Ginger-Lemon Comfort Tea");
+    teas.push("Hamy Black Tea");
     tips.push("Stay hydrated", "Rest in a dark, quiet room", "Try peppermint oil on temples");
   }
   if (symptoms.includes("moodswings") || symptoms.includes("anxiety")) {
-    teas.push("Chamomile-Lavender Calm Blend");
+    teas.push("Hami Hibiscus Spiced Delight");
     tips.push("Practice deep breathing exercises", "Journal your feelings", "Take a warm bath");
   }
   if (symptoms.includes("fatigue")) {
-    teas.push("Raspberry Leaf Vitality Tea");
+    teas.push("Hamy Black Tea", "Hamy Green Tea");
     tips.push("Prioritize sleep", "Eat iron-rich foods", "Take short power naps");
   }
   if (symptoms.includes("nausea")) {
-    teas.push("Ginger-Lemon Comfort Tea");
+    teas.push("Hamy Black Tea", "Hamy Green Tea");
     tips.push("Eat small, frequent meals", "Avoid strong smells", "Try ginger candies");
   }
 

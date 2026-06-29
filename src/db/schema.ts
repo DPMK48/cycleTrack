@@ -31,6 +31,7 @@ export const teas = pgTable("teas", {
   bulkPrice: text("bulk_price").notNull(),
   bulkMinQty: integer("bulk_min_qty").default(10),
   imageUrl: text("image_url"),
+  videoUrl: text("video_url"),
   isPrimary: boolean("is_primary").default(false),
   category: text("category"),
   createdAt: timestamp("created_at").defaultNow(),
